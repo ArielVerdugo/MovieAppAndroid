@@ -1,10 +1,9 @@
 package com.example.movieappandroid.util
 
-sealed class Resource<out T>(
-    val data: T? = null,
-    val message: String? = null,
-    val isLoading: Boolean = false) {
-    object Loading: Resource<Nothing>()
-    class Success<T>(data: T?) : Resource<T>(data)
-    class Error<T>(data: T?, message: String?) : Resource<T>(data, message)
+import com.example.movieappandroid.domain.model.Movie
+
+sealed class Resource() {
+    object Loading: Resource()
+    data class Success(val movies: List<Movie>): Resource()
+    data class Error(val message: String?) : Resource()
 }
