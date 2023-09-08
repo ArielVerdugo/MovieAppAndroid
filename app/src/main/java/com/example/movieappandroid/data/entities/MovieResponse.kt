@@ -9,21 +9,21 @@ data class MovieResponse(
     @Json(name = "backdrop_path")
     val backdropPath: String? = null,
     @Json(name = "genre_ids")
-    val genreIds: List<Int>?,
+    val genreIds: List<Int>? = null,
     @Json(name = "id")
     val id: Int? = null,
     @Json(name = "original_language")
-    val originalLanguage: String,
+    val originalLanguage: String? = null,
     @Json(name = "original_title")
-    val originalTitle: String,
+    val originalTitle: String? = null,
     @Json(name = "overview")
     val overview: String? = null,
     @Json(name = "popularity")
     val popularity: Double? = null,
     @Json(name = "poster_path")
-    val posterPath: String,
+    val posterPath: String? = null,
     @Json(name = "release_date")
-    val releaseDate: String,
+    val releaseDate: String? = null,
     @Json(name = "title")
     val title: String? = null,
     @Json(name = "video")

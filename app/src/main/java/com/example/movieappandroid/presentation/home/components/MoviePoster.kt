@@ -38,7 +38,7 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier) {
     var sizeImage by remember { mutableStateOf(IntSize.Zero) }
     val gradient = Brush.verticalGradient(
         colors = listOf(Color.Transparent, Color.Black),
-        startY = sizeImage.height.toFloat()/2,
+        startY = sizeImage.height.toFloat() / 2,
         endY = sizeImage.height.toFloat()
     )
     Box(
@@ -51,14 +51,16 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier) {
                 sizeImage = it.size
             }
         )
-        Box(modifier = Modifier.matchParentSize().background(gradient))
+        Box(modifier = Modifier
+            .matchParentSize()
+            .background(gradient))
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(10.dp)
         ) {
             Text(
-                text = movie.releaseDate.substring(0,4),
+                text = movie.releaseDate.substring(0, 4),
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White
             )
