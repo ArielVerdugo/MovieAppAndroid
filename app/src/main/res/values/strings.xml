@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MovieAppAndroid</string>
     <string name="movies_title">MOVIES</string>
+    <string name="retry">volver a intentar</string>
 </resources>

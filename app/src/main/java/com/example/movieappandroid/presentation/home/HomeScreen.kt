@@ -7,46 +7,30 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieappandroid.R
 import com.example.movieappandroid.domain.model.Movie
 import com.example.movieappandroid.presentation.home.components.MovieCard
-import com.example.movieappandroid.util.Resource
 
 @Composable
 fun HomeScreen() {
-
-    val viewModel: HomeViewModel = hiltViewModel()
-    val uiState by viewModel.uiState.collectAsState()
-
-    when (uiState) {
-        is Resource.Loading -> {
-
-        }
-
-        is Resource.Error -> {
-
-        }
-
-        is Resource.Success -> {
-            MoviesList((uiState as Resource.Success).movies)
-        }
-    }
-}
-
-@Composable
-fun MoviesList(movies: List<Movie>) {
     val context = LocalContext.current
+    val viewModel: HomeViewModel = hiltViewModel()
+    val moviePagingItems: LazyPagingItems<Movie> = viewModel.moviesState.collectAsLazyPagingItems()
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -67,10 +51,45 @@ fun MoviesList(movies: List<Movie>) {
                     style = MaterialTheme.typography.titleLarge
                 )
             })
-            items(items = movies, key = { movie -> movie.id }) { it ->
-                MovieCard(
-                    it
-                )
+            items(moviePagingItems.itemCount) { it ->
+                moviePagingItems[it]?.let { it1 ->
+                    MovieCard(
+                        it1
+                    )
+                }
+            }
+            moviePagingItems.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item { PageLoader(modifier = Modifier.fillMaxSize()) }
+                    }
+
+                    loadState.refresh is LoadState.Error -> {
+                        val error = moviePagingItems.loadState.refresh as LoadState.Error
+                        item {
+                            ErrorMessage(
+                                modifier = Modifier.fillMaxSize(),
+                                message = error.error.localizedMessage,
+                                onClickRetry = { retry() }
+                            )
+                        }
+                    }
+
+                    loadState.append is LoadState.Loading -> {
+                        item { LoadingNextPageItem(modifier = Modifier) }
+                    }
+
+                    loadState.append is LoadState.Error -> {
+                        val error = moviePagingItems.loadState.append as LoadState.Error
+                        item {
+                            ErrorMessage(
+                                modifier = Modifier,
+                                message = error.error.localizedMessage,
+                                onClickRetry = { retry() }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
