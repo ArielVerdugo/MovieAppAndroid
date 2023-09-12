@@ -17,3 +17,5 @@ fun List<MovieResponse>.mapFromListModel(): List<Movie> {
         it.mapFromEntity()
     }
 }
+
+const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w200"
