@@ -21,6 +21,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieappandroid.R
 import com.example.movieappandroid.domain.model.Movie
 import com.example.movieappandroid.presentation.home.components.MovieCard
+import com.example.movieappandroid.util.Constants.Companion.CELLS
+import com.example.movieappandroid.util.Constants.Companion.ITEMS
+import com.example.movieappandroid.util.Constants.Companion.LINE_SPAN
 
 @Composable
 fun HomeScreen() {
@@ -32,7 +35,7 @@ fun HomeScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(CELLS),
             modifier = Modifier
                 .fillMaxSize()
                 .align(Alignment.Center),
@@ -63,7 +66,7 @@ fun HomeScreen() {
 
                     loadState.refresh is LoadState.Error -> {
                         val error = moviePagingItems.loadState.refresh as LoadState.Error
-                        items(1, span = { GridItemSpan(2) }) {
+                        items(ITEMS, span = { GridItemSpan(LINE_SPAN) }) {
                             ErrorMessage(
                                 modifier = Modifier.fillMaxSize(),
                                 message = error.error.localizedMessage,
@@ -78,7 +81,7 @@ fun HomeScreen() {
 
                     loadState.append is LoadState.Error -> {
                         val error = moviePagingItems.loadState.append as LoadState.Error
-                        items(1, span = { GridItemSpan(2) }) {
+                        items(ITEMS, span = { GridItemSpan(LINE_SPAN) }) {
                             ErrorMessage(
                                 modifier = Modifier,
                                 message = error.error.localizedMessage,

@@ -7,6 +7,8 @@ import com.example.movieappandroid.data.repository.remote.MoviePagingSource
 import com.example.movieappandroid.data.repository.remote.RemoteDataSource
 import com.example.movieappandroid.domain.model.Movie
 import com.example.movieappandroid.domain.repository.MoviesRepository
+import com.example.movieappandroid.util.Constants.Companion.PAGE_SIZE
+import com.example.movieappandroid.util.Constants.Companion.PREFETCH_DISTANCE
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -16,7 +18,7 @@ class MoviesRepositoryImpl @Inject constructor(
 
     override suspend fun getDiscoverMovies(): Flow<PagingData<Movie>> =
         Pager(
-            config = PagingConfig(pageSize = 14, prefetchDistance = 2),
+            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = PREFETCH_DISTANCE),
             pagingSourceFactory = {
                 MoviePagingSource(remoteDataSource = remoteDataSource)
             }
