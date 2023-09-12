@@ -44,16 +44,18 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        AsyncImage(
-            model = movie.poster,
-            contentDescription = null,
-            modifier = Modifier.onGloballyPositioned {
-                sizeImage = it.size
-            }
-        )
+
         Box(modifier = Modifier
             .matchParentSize()
-            .background(gradient))
+            .background(gradient)){
+            AsyncImage(
+                model = movie.poster,
+                contentDescription = null,
+                modifier = Modifier.onGloballyPositioned {
+                    sizeImage = it.size
+                }
+            )
+        }
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -82,7 +84,7 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
+/*@Composable
 @Preview
 fun MovieCardPreview() {
     val movie = Movie(
@@ -100,7 +102,7 @@ fun MovieCardPreview() {
                 .fillMaxSize()
         )
     }
-}
+}*/
 
 @Composable
 fun MovieAverage(voteAverage: String) {

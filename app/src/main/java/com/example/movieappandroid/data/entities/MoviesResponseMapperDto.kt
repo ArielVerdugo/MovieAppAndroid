@@ -1,6 +1,7 @@
 package com.example.movieappandroid.data.entities
 
 import com.example.movieappandroid.domain.model.Movie
+import com.example.movieappandroid.util.Constants.Companion.POSTER_BASE_URL
 
 fun MovieResponse.mapFromEntity() = Movie(
     id = this.id.toString(),
@@ -9,7 +10,8 @@ fun MovieResponse.mapFromEntity() = Movie(
     poster =  POSTER_BASE_URL + this.posterPath ?: "",
     releaseDate = this.releaseDate.orEmpty(),
     title = this.title.orEmpty(),
-    voteAverage = this.voteAverage ?: 0.0
+    voteAverage = this.voteAverage ?: 0.0,
+    expirationDate = System.currentTimeMillis()
 )
 
 fun List<MovieResponse>.mapFromListModel(): List<Movie> {
@@ -17,5 +19,3 @@ fun List<MovieResponse>.mapFromListModel(): List<Movie> {
         it.mapFromEntity()
     }
 }
-
-const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w200"
