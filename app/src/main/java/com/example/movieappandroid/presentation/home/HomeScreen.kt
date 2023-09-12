@@ -10,9 +10,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -66,7 +63,7 @@ fun HomeScreen() {
 
                     loadState.refresh is LoadState.Error -> {
                         val error = moviePagingItems.loadState.refresh as LoadState.Error
-                        item {
+                        items(1, span = { GridItemSpan(2) }) {
                             ErrorMessage(
                                 modifier = Modifier.fillMaxSize(),
                                 message = error.error.localizedMessage,
@@ -81,7 +78,7 @@ fun HomeScreen() {
 
                     loadState.append is LoadState.Error -> {
                         val error = moviePagingItems.loadState.append as LoadState.Error
-                        item {
+                        items(1, span = { GridItemSpan(2) }) {
                             ErrorMessage(
                                 modifier = Modifier,
                                 message = error.error.localizedMessage,
