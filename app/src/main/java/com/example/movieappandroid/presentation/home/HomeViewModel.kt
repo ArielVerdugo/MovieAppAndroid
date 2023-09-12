@@ -1,42 +1,36 @@
 package com.example.movieappandroid.presentation.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.movieappandroid.domain.model.Movie
 import com.example.movieappandroid.domain.usecase.GetDiscoverMoviesUseCase
+import com.example.movieappandroid.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val discoverMoviesUseCase: GetDiscoverMoviesUseCase
-): ViewModel() {
+) : ViewModel() {
 
-    lateinit var movies: Flow<List<Movie>>
+    private val _uiState = MutableStateFlow<Resource>(Resource.Loading)
+    val uiState: StateFlow<Resource> = _uiState
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: Flow<Boolean> = _isLoading.asStateFlow()
 
     init {
-        viewModelScope.launch{
+        viewModelScope.launch {
             getDiscoverMovies()
         }
     }
 
-    private suspend fun getDiscoverMovies(){
+    private suspend fun getDiscoverMovies() {
         viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                movies = discoverMoviesUseCase.invoke()
-            }catch (e:Exception){
-                Log.e("error",e.message.toString())
+            val response = discoverMoviesUseCase.invoke()
+            response.collect{
+                _uiState.value = Resource.Success(it)
             }
-            _isLoading.value = false
         }
     }
 }
