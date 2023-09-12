@@ -1,4 +1,4 @@
-package com.example.movieappandroid.data.entities
+package com.example.movieappandroid.util
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

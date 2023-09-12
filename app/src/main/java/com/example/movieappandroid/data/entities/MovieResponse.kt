@@ -1,6 +1,5 @@
 package com.example.movieappandroid.data.entities
 
-import com.example.movieappandroid.domain.model.Movie
 import com.squareup.moshi.Json
 
 data class MovieResponse(
@@ -32,16 +31,4 @@ data class MovieResponse(
     val voteAverage: Double? = null,
     @Json(name = "vote_count")
     val voteCount: Int? = null
-){
-    fun toDomain(): Movie = Movie(
-        id = this.id.toString() ?: "",
-        title = this.title ?: "",
-        popularity = this.popularity ?: 0.0,
-        overview = this.overview ?: "",
-        voteAverage = this.voteAverage ?: 0.0,
-        poster = POSTER_BASE_URL + this.posterPath ?: "",
-        releaseDate = this.releaseDate ?: ""
-    )
-}
-
-const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w200"
+)
