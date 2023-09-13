@@ -44,18 +44,16 @@ fun MovieCard(movie: Movie, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-
+        AsyncImage(
+            model = movie.poster,
+            contentDescription = null,
+            modifier = Modifier.onGloballyPositioned {
+                sizeImage = it.size
+            }
+        )
         Box(modifier = Modifier
             .matchParentSize()
-            .background(gradient)){
-            AsyncImage(
-                model = movie.poster,
-                contentDescription = null,
-                modifier = Modifier.onGloballyPositioned {
-                    sizeImage = it.size
-                }
-            )
-        }
+            .background(gradient))
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)

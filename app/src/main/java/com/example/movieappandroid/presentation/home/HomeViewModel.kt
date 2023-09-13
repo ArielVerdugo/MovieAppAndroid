@@ -2,25 +2,33 @@ package com.example.movieappandroid.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
+import com.example.movieappandroid.data.entities.local.MovieEntity
+import com.example.movieappandroid.data.entities.mapToMovieModel
 import com.example.movieappandroid.domain.model.Movie
 import com.example.movieappandroid.domain.usecase.GetDiscoverMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val discoverMoviesUseCase: GetDiscoverMoviesUseCase
+    pager: Pager<Int,MovieEntity>
 ) : ViewModel() {
 
-    private val _moviesState: MutableStateFlow<PagingData<Movie>> =
-        MutableStateFlow(value = PagingData.empty())
-    val moviesState: MutableStateFlow<PagingData<Movie>> get() = _moviesState
+    val moviesFlow = pager
+        .flow
+        .map {
+            pagingData -> pagingData.map { it.mapToMovieModel() }
+        }
+        .cachedIn(viewModelScope)
 
-
-    init {
+    /*init {
         viewModelScope.launch {
             getDiscoverMovies()
         }
@@ -33,5 +41,5 @@ class HomeViewModel @Inject constructor(
                 _moviesState.value = it
             }
         }
-    }
+    }*/
 }

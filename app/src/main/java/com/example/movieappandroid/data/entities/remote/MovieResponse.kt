@@ -1,4 +1,4 @@
-package com.example.movieappandroid.data.entities
+package com.example.movieappandroid.data.entities.remote
 
 import com.squareup.moshi.Json
 

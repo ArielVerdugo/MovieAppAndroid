@@ -1,5 +1,6 @@
 package com.example.movieappandroid.presentation.home
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,65 +31,51 @@ import com.example.movieappandroid.util.Constants.Companion.LINE_SPAN
 fun HomeScreen() {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
-    val moviePagingItems: LazyPagingItems<Movie> = viewModel.moviesState.collectAsLazyPagingItems()
+    val movies = viewModel.moviesFlow.collectAsLazyPagingItems()
+
+    LaunchedEffect(key1 = movies.loadState) {
+        if (movies.loadState.refresh is LoadState.Error) {
+            Toast.makeText(
+                context,
+                "Error: " + (movies.loadState.refresh as LoadState.Error).error.message,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(CELLS),
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.Center),
-            contentPadding = PaddingValues(12.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            item(span = {
-                GridItemSpan(maxCurrentLineSpan)
-            }, content = {
-                Text(
-                    text = context.getString(R.string.movies_title),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            })
-            items(moviePagingItems.itemCount) { it ->
-                moviePagingItems[it]?.let { it1 ->
-                    MovieCard(
-                        it1
+        if (movies.loadState.refresh is LoadState.Loading) {
+            PageLoader(modifier = Modifier.align(Alignment.Center))
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(CELLS),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .align(Alignment.Center),
+                contentPadding = PaddingValues(12.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                item(span = {
+                    GridItemSpan(maxCurrentLineSpan)
+                }, content = {
+                    Text(
+                        text = context.getString(R.string.movies_title),
+                        style = MaterialTheme.typography.titleLarge
                     )
+                })
+                items(movies.itemCount) { it ->
+                    movies[it]?.let { it1 ->
+                        MovieCard(
+                            it1
+                        )
+                    }
                 }
-            }
-            moviePagingItems.apply {
-                when {
-                    loadState.refresh is LoadState.Loading -> {
-                        item { PageLoader(modifier = Modifier.fillMaxSize()) }
-                    }
-
-                    loadState.refresh is LoadState.Error -> {
-                        val error = moviePagingItems.loadState.refresh as LoadState.Error
-                        items(ITEMS, span = { GridItemSpan(LINE_SPAN) }) {
-                            ErrorMessage(
-                                modifier = Modifier.fillMaxSize(),
-                                message = error.error.localizedMessage,
-                                onClickRetry = { retry() }
-                            )
-                        }
-                    }
-
-                    loadState.append is LoadState.Loading -> {
-                        item { LoadingNextPageItem(modifier = Modifier) }
-                    }
-
-                    loadState.append is LoadState.Error -> {
-                        val error = moviePagingItems.loadState.append as LoadState.Error
-                        items(ITEMS, span = { GridItemSpan(LINE_SPAN) }) {
-                            ErrorMessage(
-                                modifier = Modifier,
-                                message = error.error.localizedMessage,
-                                onClickRetry = { retry() }
-                            )
-                        }
+                item {
+                    if (movies.loadState.append is LoadState.Loading) {
+                        LoadingNextPageItem(modifier = Modifier)
                     }
                 }
             }

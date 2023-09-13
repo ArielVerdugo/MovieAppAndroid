@@ -1,8 +1,16 @@
 package com.example.movieappandroid.di
 
+import android.content.Context
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.room.Room
 import com.example.movieappandroid.data.api.ApiConstants
 import com.example.movieappandroid.data.api.HeadersInterceptor
 import com.example.movieappandroid.data.api.movies.MoviesService
+import com.example.movieappandroid.data.db.MoviesDB
+import com.example.movieappandroid.data.entities.local.MovieEntity
+import com.example.movieappandroid.data.repository.remote.MoviesRemoteMediator
 import com.example.movieappandroid.util.JSONArrayAdapter
 import com.example.movieappandroid.util.JSONObjectAdapter
 import com.squareup.moshi.Moshi
@@ -10,17 +18,27 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
+@OptIn(ExperimentalPagingApi::class)
 @Module
-class NetworkModule {
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    @Provides
+    @Singleton
+    fun provideMoviesDataBase(@ApplicationContext context: Context): MoviesDB {
+        return Room.databaseBuilder(
+            context,
+            MoviesDB::class.java,
+            "movies.db"
+        ).build()
+    }
 
     @Singleton
     @Provides
@@ -67,5 +85,20 @@ class NetworkModule {
     @Provides
     fun provideMoviesEndPoint(retrofit: Retrofit): MoviesService {
         return retrofit.create(MoviesService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMoviesPager(moviesDB: MoviesDB, moviesService: MoviesService): Pager<Int,MovieEntity>{
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            remoteMediator = MoviesRemoteMediator(
+                moviesDB = moviesDB,
+                moviesService = moviesService
+            ),
+            pagingSourceFactory = {
+                moviesDB.dao.pagingSource()
+            }
+        )
     }
 }
