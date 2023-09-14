@@ -18,22 +18,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.movieappandroid.R
-import com.example.movieappandroid.domain.model.Movie
+import com.example.movieappandroid.data.entities.mapToMovieModel
 import com.example.movieappandroid.presentation.home.components.MovieCard
 import com.example.movieappandroid.util.Constants.Companion.CELLS
-import com.example.movieappandroid.util.Constants.Companion.ITEMS
-import com.example.movieappandroid.util.Constants.Companion.LINE_SPAN
 
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
-    val movies = viewModel.moviesFlow.collectAsLazyPagingItems()
+    val movies = viewModel.getPopularMovies().collectAsLazyPagingItems()
 
-    LaunchedEffect(key1 = movies.loadState) {
+    /*LaunchedEffect(key1 = movies.loadState) {
         if (movies.loadState.refresh is LoadState.Error) {
             Toast.makeText(
                 context,
@@ -41,7 +38,7 @@ fun HomeScreen() {
                 Toast.LENGTH_LONG
             ).show()
         }
-    }
+    }*/
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -69,13 +66,13 @@ fun HomeScreen() {
                 items(movies.itemCount) { it ->
                     movies[it]?.let { it1 ->
                         MovieCard(
-                            it1
+                            it1.mapToMovieModel()
                         )
                     }
                 }
                 item {
                     if (movies.loadState.append is LoadState.Loading) {
-                        LoadingNextPageItem(modifier = Modifier)
+                        //LoadingNextPageItem(modifier = Modifier)
                     }
                 }
             }

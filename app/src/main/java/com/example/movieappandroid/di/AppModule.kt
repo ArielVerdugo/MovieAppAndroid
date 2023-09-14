@@ -82,23 +82,17 @@ object AppModule {
             .client(httpClient)
             .build()
 
-    @Provides
-    fun provideMoviesEndPoint(retrofit: Retrofit): MoviesService {
-        return retrofit.create(MoviesService::class.java)
-    }
-
-    @Provides
     @Singleton
-    fun provideMoviesPager(moviesDB: MoviesDB, moviesService: MoviesService): Pager<Int,MovieEntity>{
-        return Pager(
-            config = PagingConfig(pageSize = 20),
-            remoteMediator = MoviesRemoteMediator(
-                moviesDB = moviesDB,
-                moviesService = moviesService
-            ),
-            pagingSourceFactory = {
-                moviesDB.dao.pagingSource()
-            }
-        )
-    }
+    @Provides
+    fun provideRetrofitInstance(
+        httpClient: OkHttpClient,
+        moshiConverterFactory: MoshiConverterFactory,
+    ): MoviesService =
+        Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .addConverterFactory(moshiConverterFactory)
+            .build()
+            .create(MoviesService::class.java)
+
+
 }

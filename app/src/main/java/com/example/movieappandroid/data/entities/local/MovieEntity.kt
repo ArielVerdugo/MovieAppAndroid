@@ -1,23 +1,19 @@
 package com.example.movieappandroid.data.entities.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
 data class MovieEntity(
     @PrimaryKey
-    val id: Int? = null,
-    val adult: Boolean? = null,
-    val backdropPath: String? = null,
-    val originalLanguage: String? = null,
-    val originalTitle: String? = null,
-    val overview: String? = null,
-    val popularity: Double? = null,
-    val posterPath: String? = null,
-    val releaseDate: String? = null,
-    val title: String? = null,
-    val video: Boolean? = null,
-    val voteAverage: Double? = null,
-    val voteCount: Int? = null,
-    val expirationDate: Long
+    val id: Int,
+    val overview: String,
+    val popularity: Double,
+    val posterPath: String,
+    val releaseDate: String,
+    val title: String,
+    val voteAverage: Double,
+    val expirationDate: Long,
+    var page: Int,
 )

@@ -10,7 +10,7 @@ data class MovieResponse(
     @Json(name = "genre_ids")
     val genreIds: List<Int>? = null,
     @Json(name = "id")
-    val id: Int? = null,
+    val id: Int,
     @Json(name = "original_language")
     val originalLanguage: String? = null,
     @Json(name = "original_title")

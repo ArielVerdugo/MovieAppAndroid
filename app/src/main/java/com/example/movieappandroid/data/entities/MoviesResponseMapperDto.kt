@@ -13,7 +13,8 @@ fun MovieResponse.mapToMovieEntity(): MovieEntity {
         releaseDate = this.releaseDate.orEmpty(),
         title = this.title.orEmpty(),
         voteAverage = this.voteAverage ?: 0.0,
-        expirationDate = System.currentTimeMillis()
+        expirationDate = System.currentTimeMillis(),
+        page = 0
     )
 }
 fun MovieEntity.mapToMovieModel(): Movie{
@@ -27,6 +28,12 @@ fun MovieEntity.mapToMovieModel(): Movie{
         voteAverage = this.voteAverage ?: 0.0,
         expirationDate = System.currentTimeMillis()
     )
+}
+
+fun List<MovieResponse>.mapFromListEntity(): List<MovieEntity> {
+    return this.map {
+        it.mapToMovieEntity()
+    }
 }
 
 fun List<MovieEntity>.mapFromListModel(): List<Movie> {
