@@ -3,4 +3,5 @@
     <string name="movies_title">MOVIES</string>
     <string name="retry">volver a intentar</string>
     <string name="back">Back</string>
+    <string name="show_reviews">Show Reviews</string>
 </resources>

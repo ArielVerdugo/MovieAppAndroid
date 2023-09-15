@@ -1,5 +1,6 @@
 package com.example.movieappandroid.presentation.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,7 +27,7 @@ import com.example.movieappandroid.util.Constants.Companion.ITEMS
 import com.example.movieappandroid.util.Constants.Companion.LINE_SPAN
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onMoviePressed: (Movie) -> Unit) {
     val context = LocalContext.current
     val viewModel: HomeViewModel = hiltViewModel()
     val moviePagingItems: LazyPagingItems<Movie> = viewModel.moviesState.collectAsLazyPagingItems()
@@ -54,7 +55,8 @@ fun HomeScreen() {
             items(moviePagingItems.itemCount) { it ->
                 moviePagingItems[it]?.let { it1 ->
                     MovieCard(
-                        it1
+                        movie = it1,
+                        modifier = Modifier.clickable { onMoviePressed(it1) }
                     )
                 }
             }

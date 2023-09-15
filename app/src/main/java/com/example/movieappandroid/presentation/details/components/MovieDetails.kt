@@ -26,8 +26,8 @@ import kotlin.math.floor
 
 
 @Composable
-fun MovieDetails(gender: String, votes: Int, popularity: Int){
-    Box(modifier = Modifier.fillMaxSize()){
+fun MovieDetails(gender: String, votes: Int, popularity: Int) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Row() {
             Text(text = "3,292")
             Text(text = "People wathing")
@@ -37,14 +37,14 @@ fun MovieDetails(gender: String, votes: Int, popularity: Int){
 
 @Preview
 @Composable
-fun MovieDetails(){
+fun MovieDetailsPreview() {
     val voteAverage = "9.8"
     val integerValue = voteAverage.substring(0, 1)
     val decimalValue = voteAverage.substring(1)
     Box(
         modifier = Modifier
             .background(Color.White)
-    ){
+    ) {
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
@@ -82,11 +82,9 @@ fun MovieDetails(){
                         }
                     }
                 )
-                RatingBar(
-                )
+                RatingBar()
             }
         }
-
     }
 }
 
@@ -106,18 +104,11 @@ fun RatingBar(
         repeat(filledStars) {
             Icon(imageVector = Icons.Outlined.Star, contentDescription = null, tint = starsColor)
         }
-        if (halfStar) {
-            Icon(
-                imageVector = Icons.Outlined.Star,
-                contentDescription = null,
-                tint = starsColor
-            )
-        }
         repeat(unfilledStars) {
             Icon(
                 imageVector = Icons.Outlined.Star,
                 contentDescription = null,
-                tint = starsColor
+                tint = Color.LightGray
             )
         }
     }

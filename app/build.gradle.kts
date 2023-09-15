@@ -109,6 +109,9 @@ dependencies {
     implementation ("androidx.paging:paging-runtime:3.2.0-alpha06")
     implementation ("androidx.paging:paging-compose:1.0.0-alpha20")
 
+    // Navigation
+    implementation ("androidx.navigation:navigation-compose:2.5.3")
+
 }
 
 // Allow references to generated code

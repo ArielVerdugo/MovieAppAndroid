@@ -8,5 +8,6 @@ class Constants {
         const val CELLS = 2
         const val ITEMS = 1
         const val LINE_SPAN = 2
+        const val POSTER_BASE_URL = "https://image.tmdb.org/t/p/w200"
     }
 }

@@ -16,11 +16,9 @@ data class MovieDetailsResponse(
     @Json(name = "revenue")
     val revenue: Long,
     @Json(name = "genres")
-    val genres: List<Gender>,
+    val genres: List<GenderResponse>,
     @Json(name = "popularity")
     val popularity: Float,
-    @Json(name = "production_countries")
-    val productionCountries: List<ProductionCountriesItem>?,
     @Json(name = "id")
     val id: Int,
     @Json(name = "vote_count")
@@ -39,8 +37,6 @@ data class MovieDetailsResponse(
     val releaseDate: String,
     @Json(name = "vote_average")
     val voteAverage: Float,
-    @Json(name = "belongs_to_collection")
-    val belongsToCollection: BelongsToCollection?,
     @Json(name = "tagline")
     val tagline: String,
     @Json(name = "status")

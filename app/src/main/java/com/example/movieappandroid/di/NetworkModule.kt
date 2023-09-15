@@ -15,7 +15,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -67,5 +66,10 @@ class NetworkModule {
     @Provides
     fun provideMoviesEndPoint(retrofit: Retrofit): MoviesService {
         return retrofit.create(MoviesService::class.java)
+    }
+
+    @Provides
+    fun provideMovieDetailsEndPoint(retrofit: Retrofit): MovieDetails {
+        return retrofit.create(MovieDetails::class.java)
     }
 }
